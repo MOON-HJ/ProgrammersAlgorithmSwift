@@ -1,35 +1,48 @@
-// 2, 5, 7, 11~15, 17~23, 26~28 Failed
+//2,5,7,17,18,20,21,23,27
 
 import Foundation
 
 func solution(_ s:String) -> Int {
-    var lengths:[Int] = []
+    let s:[String] = s.map{String($0)}
+    var answer = 1000
+    
     if s.count == 1 {
         return 1
     }
-    
-    
-    for n in 1...s.count/2 {
-        if s.count % n != 0 {
-            continue
+    for x in 1...(s.count/2)+1 {
+        var string:[String] = []
+        var y = 0
+        var count=1
+        while y < s.count-1 {
+            if (y+x+x < s.count) && (s[y..<(y+x)] == s[(y+x)..<(y+x+x)]){
+                count+=1
+            } else if count<=1 {
+                if (y+x+x > s.count) {
+                    string.append(contentsOf: s[y...])
+                } else {
+                    string.append(contentsOf: Array(s[y..<(y+x)]))
+                }
+                count=1
+            } else {
+                string.append(String(count))
+                string.append(contentsOf: s[y..<(y+x)])
+                count=1
+            }
+            y += x
+            
         }
-
-        var line = Array(s)
-        var prev:[Character] = []
-        var comparesNearby:[Bool] = []
-        
-        while !line.isEmpty {
-            comparesNearby.append(prev == Array(line.prefix(n)))
-            prev = Array(line.prefix(n))
-            line = Array(line.dropFirst(n))
+        if string.reduce("", +).count < answer{
+            answer = string.reduce("", +).count
         }
-        
-        let countLetter = (comparesNearby.filter{!$0}.count-1) * n + (s.count%n==0 ? n : s.count%n)
-        let countTimes = comparesNearby.enumerated()
-            .filter{ i, v in i==0 ? true : !comparesNearby[i-1] && v }.count-1
-
-        lengths.append( countLetter + countTimes )
     }
-    
-    return lengths.min()!
+    return answer
 }
+
+solution("aaaaaaaaaabbb") //5
+//solution("aaabbaccc") // 7
+//solution("")
+solution("ababcdcdababcdcd") // 9x
+//solution("abcabcdede") // 8
+solution("abcabcabcabcdededededede") //14x
+solution("xababcdcdababcdcd")// 17x
+solution("a")//x
