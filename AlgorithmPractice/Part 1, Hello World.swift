@@ -5,6 +5,6 @@ import Foundation
 
 func solution(_ array:[Int]) -> Int {
     return array[0] + array[array.count-1]
-}
+}Part 1, Hello World
 
 solution([5, 3, 8, 2])
