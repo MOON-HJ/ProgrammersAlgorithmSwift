@@ -1,4 +1,4 @@
-// 1~9, 11 failed
+// 1~6, 11 failed
 import Foundation
 
 func solution(_ numbers:[Int]) -> String {
@@ -8,17 +8,17 @@ func solution(_ numbers:[Int]) -> String {
 }
 
 func compare(_ a:String, _ b:String) -> Bool{
-    let a = a
-    let b = b
-    if a.prefix(1) == b.prefix(1) {
-        if a.prefix(2) == b.prefix(2) {
-            return compare(String(a.dropFirst()), String(b.dropFirst()))
-        } else if b.count == 1 {
-            return compare(String(a.dropFirst()), b)
-        }else {
-            return compare(a, String(b.dropFirst()))
+    let prefixA = a.prefix(1)
+    let prefixB = b.prefix(1)
+    
+    func compareByPosition(_ a:String, _ b:String) -> Bool {
+        if a == "" || b == "" {
+            return (a == "" ? prefixA : a.prefix(1) ) >= (b == "" ? prefixB : b.prefix(1))
+        } else if a.prefix(1) == b.prefix(1) {
+            return compareByPosition(String(a.dropFirst()), String(b.dropFirst()))
+        } else {
+            return a.prefix(1) > b.prefix(1)
         }
-    }else {
-        return a.prefix(1) > b.prefix(1)
     }
+    return compareByPosition(a,b)
 }
