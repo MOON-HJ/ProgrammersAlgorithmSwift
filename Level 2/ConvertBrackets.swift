@@ -1,55 +1,41 @@
 import Foundation
 
 func solution(_ p:String) -> String {
-    var p = Array(p)
-    var stackCount = 0
     if p.isEmpty {
         return ""
     }
+    var w = Array(p).map{String($0)}
     
+    var count = 0
     var u:[String] = []
-    for i in p {
-        u.append(String(i))
-        if i == "(" {
-            stackCount += 1
-        } else {
-            stackCount -= 1
-            if stackCount == 0 {
-                break
-            }
-        }
+    var v:[String] = []
+    while !w.isEmpty {
+        let i = w.removeFirst()
+        count += i=="(" ? 1 : -1
+        u.append(i)
+        if count == 0 { break }
     }
-    var v:[String] = p.dropFirst(u.count).map{"\($0)"}
-    print("u=\(u), v=\(v)")
+    v = w
+    var stack = 0
+    var t = u
     
+    while !t.isEmpty {
+        let i = t.removeFirst()
+        stack += i=="(" ? 1 : -1
+        if stack < 0 { break }
+    }
     
-    var w = ["("]
-    if isRightBucket(u){
-        
+    if t.isEmpty {
+        return u.reduce("", +) + solution(v.reduce("", +))
     } else {
-        
-        w.append(contentsOf: v)
+        let b = "(" + solution(v.reduce("", +)) + ")"
         u.removeFirst()
         u.removeLast()
-        w.append(contentsOf: u.reversed())
+        return b + u.map{ $0 == ")" ? "(" : ")"}.reduce("", +)
     }
     
-    
-    return w.reduce("", +)
 }
 
-func isRightBucket(_ p: [String]) -> Bool{
-    var stackCount = 0
-    for i in p {
-        if i == "(" {
-            stackCount += 1
-        } else {
-            stackCount -= 1
-            if stackCount < 0 {
-                return false
-            }
-        }
-    }
-    
-    return true
-}
+solution("(()())()") // (()())()
+solution(")(") // ()
+solution("()))((()") //()(())()
