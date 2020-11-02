@@ -26,25 +26,9 @@ func solution(_ numbers:[Int], _ target:Int) -> Int {
                 break
             }
         }
-    }
-    
-    print(answer)
-        
-//    print(x, numbers)
-    
+    }    
     
     return 0
 }
 
-
-
-//solution([1, 1, 1, 1, 1], 3) // 5
 solution([1,2,3,4,5], 3) // -> 9
-//solution([1,3,3,6,7], 2) // -> 9
-
-//6,7 min 2
-//1,3,5 max 3
-//1,3,3 max 3
-//1,3,3,6 max 4
-//1,1,1,1,1
-
