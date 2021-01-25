@@ -1,24 +1,14 @@
 
 import Foundation
 
+
 func solution(_ clothes:[[String]]) -> Int {
-    var dic : [String:Int] = [:]
-    
-    clothes.forEach { cloth in
-        if dic[cloth[1]] != nil {
-            dic[cloth[1]]! += 1
-        } else {
-            dic[cloth[1]] = 1
-        }
-    }
-    
-//    1개
-//
-    
-    print(dic)
-    return 0
+    let cloth = Dictionary(clothes.map{($0[1], 1)}, uniquingKeysWith: +).values
+    return     cloth.map{$0+1}.reduce(1, *)-1
 }
 
 solution([["yellow_hat", "headgear"],
          ["blue_sunglasses", "eyewear"],
          ["green_turban", "headgear"]])
+
+solution([["crow_mask", "face"], ["blue_sunglasses", "face"], ["smoky_makeup", "face"]])
