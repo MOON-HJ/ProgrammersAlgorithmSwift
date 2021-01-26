@@ -1,34 +1,17 @@
 import Foundation
 
+
 func solution(_ numbers:[Int], _ target:Int) -> Int {
-    let x = (target+numbers.reduce(0, +))/2
-    let numbers = numbers.sorted()
+    let totalCaseCount:Int = Int(truncating: NSDecimalNumber(decimal: pow(2, numbers.count)))
     var answer = 0
-    var minCount = 0
-    var maxCount = 0
-    
-    for i in 1...numbers.count{
-        if numbers.suffix(i).reduce(0, +) <= x {
-            minCount = i
-        }
-        if numbers.prefix(i).reduce(0, +) <= x {
-            maxCount = i
-        }
+    (0..<totalCaseCount).forEach { i in
+        let b = String(i, radix: 2).map{$0 == "1"}
+        let cases = [Bool](repeating: false, count: numbers.count-b.count) + b
+        let sum = zip(numbers, cases).map{$1 ? $0 : -$0}.reduce(0, +)
+        answer += (sum == target) ? 1 : 0
     }
-    
-    print(minCount, maxCount)
-    for i in 0..<numbers.count{
-        for j in i+1..<numbers.count{
-            let sum = numbers[i] + numbers[j]
-            if sum == x {
-                answer += 1
-            } else if sum > x {
-                break
-            }
-        }
-    }    
-    
-    return 0
+
+    return answer
 }
 
-solution([1,2,3,4,5], 3) // -> 9
+
