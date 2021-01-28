@@ -1,36 +1,68 @@
-// 1~4, 7, 10~12 Failed :: 부분집합 내부 원소에 대한 순서 때문에 틀린 거 같음
+// 1~2, 6, 9~11 Failed
 
 import Foundation
 
+
 func solution(_ numbers:String) -> Int {
-    let numbers:[Character] = Array(numbers)
-    let n = numbers.count
-    var result:[Int] = []
-    
-    for i in (1 ..< 1<<n){
-        var number:String = ""
-        for j in (0 ..< n){
-            if ((i & (1 << j)) != 0)  {
-                number += String(numbers[j])
+    let numbers = Array(numbers.map{String($0)})
+    var include = [Bool](repeating: false, count: numbers.count)
+    var candidate:Set<Int> = []
+
+    func isPrime(_ num: Int) -> Bool{
+        if (0...2).contains(num){
+            return false
+        }
+        
+        var i = 2
+        while i*i <= num {
+            if num % i == 0 {
+                return false;
+            }
+            i += 1
+        }
+        
+        return true;
+    }
+
+
+    func permutaion(array:[String], start:Int, end: Int){
+        var array = array
+        if start == end{
+            candidate.insert(Int(array.reduce(""){$0 + $1})!)
+
+            
+        } else {
+            for i in (start...end){
+                array.swapAt(start, end)
+                permutaion(array: array, start: start+1, end: end)
+                array.swapAt(start, i)
             }
         }
-        print(number)
-        result.append(Int(number)!)
-    }
-    return Set(result).map{isPrime($0)}.filter{$0}.count
-}
-
-func isPrime(_ number:Int) -> Bool {
-    if number ==  0 {
-        return false
     }
     
-    var i = 2
-    while i*i <= number {
-        if(number % i == 0) {
-            return false;
-        }
-        i+=1
+    func powerSet(_ k:Int) {
+        if k == numbers.count {
+            let combination = (0..<numbers.count).compactMap{  include[$0] ? numbers[$0] : nil }
+             !combination.isEmpty ? permutaion(array: combination, start: 0, end: combination.count-1) : nil
+        return;
+      }
+    
+      include[k] = false;
+      powerSet(k + 1);
+      include[k] = true;
+      powerSet(k + 1);
     }
-    return true
+    
+    powerSet(0)
+    
+    return candidate.filter{isPrime($0)}.count
+    
 }
+
+
+
+//permutaion(array: [1,2,3], start: 0, end: 2)
+//solution("123")
+//solution("17")
+//solution("011")
+solution("12")
