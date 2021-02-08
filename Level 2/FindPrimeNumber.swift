@@ -1,5 +1,4 @@
-// 1~2, 6, 9~11 Failed
-
+// 2,10,11 Failed
 import Foundation
 
 
@@ -9,19 +8,19 @@ func solution(_ numbers:String) -> Int {
     var candidate:Set<Int> = []
 
     func isPrime(_ num: Int) -> Bool{
-        if (0...2).contains(num){
+        if num <= 1{
             return false
         }
-        
         var i = 2
-        while i*i <= num {
-            if num % i == 0 {
-                return false;
+         
+        while i <= num/i {
+            if (num % i == 0 || num % (i + 2) == 0){
+                return false
             }
-            i += 1
+            i+=1
         }
-        
-        return true;
+        return true
+
     }
 
 
@@ -52,13 +51,12 @@ func solution(_ numbers:String) -> Int {
       include[k] = true;
       powerSet(k + 1);
     }
-    
+
     powerSet(0)
-    
+    print(candidate)
     return candidate.filter{isPrime($0)}.count
     
 }
-
 
 
 //permutaion(array: [1,2,3], start: 0, end: 2)
