@@ -1,63 +1,49 @@
-// 2,10,11 Failed
+// 5,8 TimeOut
 import Foundation
 
 
-func solution(_ numbers:String) -> Int {
-    let numbers = Array(numbers.map{String($0)})
-    var include = [Bool](repeating: false, count: numbers.count)
-    var candidate:Set<Int> = []
+import Foundation
 
-    func isPrime(_ num: Int) -> Bool{
-        if num <= 1{
+func isPrime(_ num: Int) -> Bool{
+    if num <= 1{
+        return false
+    }
+    var i = 2
+     
+    while i <= num/i {
+        if (num % i == 0 || num % (i + 2) == 0){
             return false
         }
-        var i = 2
-         
-        while i <= num/i {
-            if (num % i == 0 || num % (i + 2) == 0){
-                return false
-            }
-            i+=1
-        }
-        return true
-
+        i+=1
     }
+    return true
 
-
-    func permutaion(array:[String], start:Int, end: Int){
-        var array = array
-        if start == end{
-            candidate.insert(Int(array.reduce(""){$0 + $1})!)
-
-            
-        } else {
-            for i in (start...end){
-                array.swapAt(start, end)
-                permutaion(array: array, start: start+1, end: end)
-                array.swapAt(start, i)
-            }
-        }
-    }
-    
-    func powerSet(_ k:Int) {
-        if k == numbers.count {
-            let combination = (0..<numbers.count).compactMap{  include[$0] ? numbers[$0] : nil }
-             !combination.isEmpty ? permutaion(array: combination, start: 0, end: combination.count-1) : nil
-        return;
-      }
-    
-      include[k] = false;
-      powerSet(k + 1);
-      include[k] = true;
-      powerSet(k + 1);
-    }
-
-    powerSet(0)
-    print(candidate)
-    return candidate.filter{isPrime($0)}.count
-    
 }
 
+func solution(_ numbers:String) -> Int {
+    let num = Array(numbers).map{String($0)}.sorted(by: >)
+    let bigNum = Int(num.reduce("", +))!
+    
+    let primes = (0...bigNum).filter{isPrime($0)}.map{String($0)}
+    
+    return primes.map{Array(String($0))}.filter{
+        var checkContain = false
+        var num = num
+        
+        for i in $0 {
+            if num.contains(String(i)){
+                checkContain = true
+                let index = num.firstIndex(of:String(i))!
+                num[index] = ""
+            }else{
+                checkContain = false
+                break
+            }
+        }
+        return checkContain
+
+    }.count
+}
 
 //permutaion(array: [1,2,3], start: 0, end: 2)
 //solution("123")
