@@ -1,52 +1,46 @@
-// 5,8 TimeOut
 import Foundation
-
-
-import Foundation
-
-func isPrime(_ num: Int) -> Bool{
-    if num <= 1{
-        return false
-    }
-    var i = 2
-     
-    while i <= num/i {
-        if (num % i == 0 || num % (i + 2) == 0){
-            return false
-        }
-        i+=1
-    }
-    return true
-
-}
 
 func solution(_ numbers:String) -> Int {
     let num = Array(numbers).map{String($0)}.sorted(by: >)
     let bigNum = Int(num.reduce("", +))!
     
-    let primes = (0...bigNum).filter{isPrime($0)}.map{String($0)}
     
-    return primes.map{Array(String($0))}.filter{
+    var primes: [Int] = []
+    var arr = Array.init(repeating: false, count: bigNum + 1)
+    for i in 2 ... bigNum{
+        if !arr[i]{
+            primes.append(i)
+            for j in stride(from: i, to: bigNum + 1, by: i){
+                arr[j] = true
+            }
+        }
+    }
+    
+    
+    var answer = 0
+    for i in primes{
         var checkContain = false
         var num = num
         
-        for i in $0 {
-            if num.contains(String(i)){
+        for j in Array(String(i)) {
+            if num.contains(String(j)){
                 checkContain = true
-                let index = num.firstIndex(of:String(i))!
+                let index = num.firstIndex(of:String(j))!
                 num[index] = ""
             }else{
                 checkContain = false
                 break
             }
         }
-        return checkContain
-
-    }.count
+        
+        if checkContain {
+            answer += 1
+        }
+        
+    }
+    
+    return answer
 }
 
-//permutaion(array: [1,2,3], start: 0, end: 2)
-//solution("123")
-//solution("17")
-//solution("011")
-solution("12")
+solution("17")
+solution("011")
