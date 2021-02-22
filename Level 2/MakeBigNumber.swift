@@ -1,17 +1,27 @@
 import Foundation
 
 func solution(_ number:String, _ k:Int) -> String {
-    let numbers = Array(number)
-    var mins = numbers.sorted().prefix(k)
+    let number = Array(number)
+    var k = k
+    var stack:[Character] = []
     
-    return numbers.filter{
-        if mins.contains($0) {
-            mins.remove(at: mins.firstIndex(of: $0)!)
-            return false
-        } else {
-            return true
+    stack.append(number.first!)
+    
+    for i in number.dropFirst() {
+        while (stack.count > 0) && (stack.last ?? "0" < i) && (k > 0){
+            k -= 1
+            stack.removeLast()
+            
         }
-    }.map{String($0)}.reduce("", +)
+        stack.append(i)
+    }
+    
+    if k != 0 {
+        stack.removeLast(k)
+        
+    }
+    
+    return stack.reduce(""){String($0)+String($1)}
 }
 
 
